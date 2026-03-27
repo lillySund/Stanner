@@ -46,18 +46,28 @@ public class StudyModel : PageModel
 
         return Page();
     }
-    //xp system adding 10 xp for each flashcard studied
-    public async Task<IActionResult> OnPostCompleteStudyAsync(int flashcardId)
+
+    // Complete entire study session and save XP
+    public async Task<IActionResult> OnPostCompleteStudyAsync(int totalXpEarned)
     {
-        var flashcard = await _context.Flashcards.FindAsync(flashcardId);
-        
-        if (flashcard != null)
+        string userId = "temp-user-1";  // TODO: Replace with actual user ID
+
+        var userProfile = await _context.UserProfiles
+            .FirstOrDefaultAsync(u => u.UserId == userId);
+
+        if (userProfile == null)
         {
-            flashcard.TimesStudied++;
-            flashcard.LastStudied = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+            return new JsonResult(new { success = false, message = "User not found" });
         }
 
-        return new JsonResult(new { success = true, xp = 10 });
+        // Add XP to user profile
+        userProfile.TotalXP += totalXpEarned;
+
+        // Calculate new level (every 100 XP = 1 level)
+        userProfile.Level = (userProfile.TotalXP / 100) + 1;
+
+        await _context.SaveChangesAsync();
+
+        return new JsonResult(new { success = true, xp = totalXpEarned, newLevel = userProfile.Level, newTotalXP = userProfile.TotalXP });
     }
 }

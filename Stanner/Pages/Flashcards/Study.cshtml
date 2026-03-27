@@ -122,6 +122,9 @@
         }
 
         function showCompletion() {
+            // Save XP to database
+            saveStudySession(totalXP);
+            
             document.querySelector('.flashcard-container').innerHTML = `
                 <div class="text-center">
                     <h2>Study Session Complete!</h2>
@@ -131,7 +134,27 @@
             `;
         }
 
+        function saveStudySession(totalXpEarned) {
+            fetch('/Flashcards/Study?handler=CompleteStudy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({ totalXpEarned: totalXpEarned })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('XP saved! New total:', data.newTotalXP);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
         // Load first card on page load
         loadCard(0);
+        //calculation for level up
+        userProfile.Level = (userProfile.TotalXP / 100) + 1;
     </script>
 }
