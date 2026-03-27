@@ -1,0 +1,44 @@
+@page
+@model Stanner.Pages.Notes.EditModel
+@{
+    ViewData["Title"] = "Edit Note";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1>Edit Note</h1>
+            <hr />
+            
+            <form method="post">
+                <input type="hidden" asp-for="Note.Id" />
+                <input type="hidden" asp-for="Note.SubjectId" />
+                
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="mb-3">
+                    <label asp-for="Note.Title" class="form-label">Note Title</label>
+                    <input asp-for="Note.Title" class="form-control" />
+                    <span asp-validation-for="Note.Title" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="Note.Content" class="form-label">Content</label>
+                    <textarea asp-for="Note.Content" class="form-control" rows="10"></textarea>
+                    <span asp-validation-for="Note.Content" class="text-danger"></span>
+                </div>
+                
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                    <a asp-page="/Notes/Index" asp-route-subjectId="@Model.Note.SubjectId" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
