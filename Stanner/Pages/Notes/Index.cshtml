@@ -35,13 +35,7 @@
                             {
                                 <p class="card-text">@(note.Content.Length > 150 ? note.Content.Substring(0, 150) + "..." : note.Content)</p>
                             }
-                            
-                            @if (note.Attachments.Any())
-                            {
-                                <p class="text-muted small">
-                                    <i class="bi bi-paperclip"></i> @note.Attachments.Count attachment(s)
-                                </p>
-                            }
+                        
                         </div>
                         <div class="card-footer bg-transparent">
                             <a asp-page="/Notes/View" asp-route-id="@note.Id" class="btn btn-sm btn-outline-primary">View</a>
