@@ -91,7 +91,7 @@
 
 @section Scripts {
     <script>
-        const flashcards = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Flashcards.Select(f => new { f.Id, f.Question, f.Answer })));
+        const flashcards = @Html.Raw(Json.Serialize(Model.Flashcards.Select(f => new { f.Id, f.Question, f.Answer })));
         let currentIndex = 0;
         let totalXP = 0;
 
